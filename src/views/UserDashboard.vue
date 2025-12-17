@@ -154,11 +154,6 @@
           <p class="text-gray-400 text-sm">Group DMs</p>
           <p class="text-2xl font-bold text-white">{{ groupDms.length }}</p>
         </div>
-
-        <div class="bg-[#141418] border border-gray-800 rounded-xl p-5">
-          <p class="text-gray-400 text-sm">Last Backup</p>
-          <p class="text-sm text-white">Just now</p>
-        </div>
       </section>
 
       <!-- Servers -->

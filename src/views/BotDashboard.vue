@@ -144,19 +144,6 @@
         </div>
       </div>
 
-      <!-- STATS -->
-      <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-        <div class="bg-[#141418] border border-gray-800 rounded-xl p-5">
-          <p class="text-gray-400 text-sm">Servers</p>
-          <p class="text-2xl font-bold text-white">{{ servers.length }}</p>
-        </div>
-
-        <div class="bg-[#141418] border border-gray-800 rounded-xl p-5">
-          <p class="text-gray-400 text-sm">Last Backup</p>
-          <p class="text-sm text-white">Just now</p>
-        </div>
-      </section>
-
       <!-- SERVERS -->
       <section>
         <div class="mt-10 mb-10">
@@ -292,7 +279,7 @@ const fetchServers = async () => {
   try {
     const result = await sendGetRequest("data?tokenType=bot");
     if (result?.data) {
-      servers.value = result.data.guilds;
+      servers.value = result.data.guilds.map((guild) => formatDM(guild));
     } else {
       toast.error("No servers found");
     }
@@ -301,6 +288,31 @@ const fetchServers = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const formatDM = (dm) => {
+  const defaultAvatar = "https://cdn.discordapp.com/embed/avatars/1.png";
+  // Build avatar URL if avatar hash exists
+
+  const avatarURL = dm.iconURL ? dm.iconURL : defaultAvatar;
+  const truncate = (text, max = 13) => {
+    if (!text) return "";
+    return text.length > max ? text.slice(0, max) + "..." : text;
+  };
+
+  const displayName =
+    dm.name ||
+    (dm.type === "DM"
+      ? "Unknown User"
+      : dm.type === "GROUP_DM"
+      ? "Unnamed Group"
+      : "Unknown");
+
+  return {
+    ...dm,
+    name: displayName,
+    iconURL: avatarURL,
+  };
 };
 // ---------------------------
 // ON PAGE LOAD
