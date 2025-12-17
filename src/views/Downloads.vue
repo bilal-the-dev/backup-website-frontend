@@ -36,7 +36,9 @@
               <h1 class="text-4xl font-bold text-white tracking-tight mb-1">
                 Download Queue
               </h1>
-              <p class="text-gray-400 text-sm">Active & completed processes</p>
+              <p class="text-gray-400 text-sm">
+                Active, completed & errored processes
+              </p>
             </div>
           </div>
         </div>
@@ -113,6 +115,7 @@
 
                 <!-- Actions -->
                 <button
+                  v-if="job.status !== 'active'"
                   @click.stop="handleCancelNotification(job)"
                   class="p-2 rounded-lg border border-gray-700 bg-[#1a1a1e] hover:bg-gray-800 transition"
                   title="Cancel (soon)"
@@ -128,6 +131,89 @@
               class="text-center text-gray-500 py-12 bg-[#121216]/50 rounded-xl border border-gray-800"
             >
               No active processes
+            </div>
+          </div>
+        </div>
+
+        <!-- Errored Processes Section -->
+        <div class="mb-10">
+          <h2 class="text-xl font-semibold text-white mb-4 px-2">
+            Errored Processes
+          </h2>
+          <div class="space-y-4">
+            <div
+              v-for="job in erroredProcesses"
+              :key="job.id"
+              class="rounded-xl border border-red-900/30 bg-[#121216] shadow-lg"
+            >
+              <div
+                class="flex flex-col sm:flex-row items-start sm:items-center gap-4 px-5 py-4"
+              >
+                <!-- Icon -->
+                <img
+                  :src="job.icon"
+                  class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover border border-gray-700 shrink-0"
+                />
+
+                <!-- Info -->
+                <div class="flex-1 w-full">
+                  <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-white font-medium">
+                      {{ job.name }}
+                    </span>
+                  </div>
+
+                  <div v-if="job.errorMessage" class="mt-3">
+                    <p class="text-red-400 text-sm">
+                      Error: {{ job.errorMessage }}
+                    </p>
+                  </div>
+
+                  <!-- Status / Meta -->
+                  <div class="mt-3 flex flex-wrap items-center gap-2">
+                    <!-- Status -->
+                    <span
+                      class="text-xs px-2 py-1 rounded-md border flex items-center gap-2"
+                      :class="STATUS_STYLES[job.status]"
+                    >
+                      {{ getStatusText(job) }}
+                    </span>
+
+                    <!-- Token Type -->
+                    <span
+                      class="text-xs px-2 py-1 rounded-md border border-gray-700 text-gray-300 uppercase"
+                    >
+                      {{ job.tokenType }} token
+                    </span>
+
+                    <!-- Item Type -->
+                    <span
+                      class="text-xs px-2 py-1 rounded-md border border-gray-700 text-gray-400"
+                    >
+                      {{ job.type }}
+                    </span>
+                  </div>
+
+                  <!-- Error Message -->
+                </div>
+
+                <!-- Actions -->
+                <button
+                  @click.stop="handleCancelNotification(job)"
+                  class="p-2 rounded-lg border border-gray-700 bg-[#1a1a1e] hover:bg-gray-800 transition"
+                  title="Remove"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty State for Errored -->
+            <div
+              v-if="!erroredProcesses.length"
+              class="text-center text-gray-500 py-12 bg-[#121216]/50 rounded-xl border border-gray-800"
+            >
+              No errored processes
             </div>
           </div>
         </div>
@@ -230,6 +316,7 @@ const getStatusText = (job) => {
   }
 
   if (job.status === "completed") return "Completed";
+  if (job.status === "errored") return "Error";
   if (job.status === "failed") return "Failed";
 
   return job.status;
@@ -243,6 +330,7 @@ const user = ref({
 });
 
 const activeProcesses = ref([]);
+const erroredProcesses = ref([]);
 const completedProcesses = ref([]);
 
 const DEFAULT_ICON = "https://cdn.discordapp.com/embed/avatars/0.png";
@@ -256,6 +344,7 @@ const ITEM_TYPE_LABELS = {
 const STATUS_STYLES = {
   active: "bg-blue-500/10 text-blue-400 border-blue-500/20",
   completed: "bg-green-500/10 text-green-400 border-green-500/20",
+  errored: "bg-red-500/10 text-red-400 border-red-500/20",
   failed: "bg-red-500/10 text-red-400 border-red-500/20",
 };
 
@@ -280,12 +369,16 @@ onMounted(async () => {
         tokenType: item.tokenType,
         type: ITEM_TYPE_LABELS[item.itemType] || item.itemType?.toUpperCase(),
         icon: item.iconURL || DEFAULT_ICON,
+        errorMessage: item.errorMsg || item.errorMsg || null,
       }));
 
-      // Separate into active and completed
+      // Separate into active, errored, and completed
       activeProcesses.value = allProcesses.filter((p) => p.status === "active");
+      erroredProcesses.value = allProcesses.filter(
+        (p) => p.status === "errored" || p.status === "failed"
+      );
       completedProcesses.value = allProcesses.filter(
-        (p) => p.status === "completed" || p.status === "failed"
+        (p) => p.status === "completed"
       );
     }
   } catch (err) {
@@ -299,6 +392,11 @@ async function handleCancelNotification(process) {
 
     // Remove from active processes
     activeProcesses.value = activeProcesses.value.filter(
+      (p) => p.id !== process.id
+    );
+
+    // Remove from errored processes
+    erroredProcesses.value = erroredProcesses.value.filter(
       (p) => p.id !== process.id
     );
 

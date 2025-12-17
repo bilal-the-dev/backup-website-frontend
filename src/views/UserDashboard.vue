@@ -192,7 +192,9 @@
                     class="text-xs mt-0.5"
                     :class="server.isLeft ? 'text-red-400' : 'text-green-400'"
                   >
-                    {{ server.isLeft ? "Left the server" : "Active in server" }}
+                    {{
+                      server.isLeft ? "Left the server" : "Present in server"
+                    }}
                   </span>
                 </div>
               </div>
@@ -203,7 +205,7 @@
               <button
                 v-if="!server.isLeft"
                 class="flex-1 bg-white text-black text-sm font-medium py-1.5 rounded-lg hover:bg-gray-200 transition"
-                @click.stop="backup(server)"
+                @click.stop="backup(server, `guild`)"
               >
                 Backup
               </button>
@@ -479,6 +481,7 @@ const backup = async (item, type) => {
 
     // Send POST request
     const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
     toast.success("Backup Started Successfully, Check on Downloads Page");
     return result;
   } catch (err) {

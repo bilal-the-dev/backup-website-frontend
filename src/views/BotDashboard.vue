@@ -179,7 +179,7 @@
                   class="text-xs mt-0.5"
                   :class="server.isLeft ? 'text-red-400' : 'text-green-400'"
                 >
-                  {{ server.isLeft ? "Left the server" : "Active in server" }}
+                  {{ server.isLeft ? "Left the server" : "Present in server" }}
                 </span>
               </div>
             </div>
@@ -341,6 +341,7 @@ const backup = async (item) => {
 
     // Send POST request
     const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
     toast.success("Backup Started Successfully, Check on Downloads Page");
     return result;
   } catch (err) {
