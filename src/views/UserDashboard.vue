@@ -417,7 +417,7 @@ const fetchServers = async () => {
   try {
     const result = await sendGetRequest("data?tokenType=user");
     if (result?.data) {
-      servers.value = result.data.guilds;
+      servers.value = result.data.guilds.map((guild) => formatDM(guild));
       const formattedDms = result.data.dms.map((dm) => formatDM(dm));
       const formattedGroupDms = result.data.groupDms.map((dm) => formatDM(dm));
       dms.value = formattedDms;
