@@ -212,8 +212,6 @@
       </section>
     </div>
 
-    <ProgessModal ref="progressModal" actionName="Backup" />
-    <ProgessModal ref="progressModal" actionName="Restoring" />
     <RestoreSelectModal
       ref="restoreSelectModal"
       :servers="servers"
@@ -225,7 +223,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { toast } from "vue3-toastify";
-import ProgessModal from "@/components/ProgessModal.vue";
 import {
   ArrowRightOnRectangleIcon,
   ArrowDownTrayIcon,
@@ -235,8 +232,8 @@ import { sendGetRequest, sendPostRequest } from "@/apis/config";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const progressModal = ref(null);
 const restoreSelectModal = ref(null);
+const selectedItem = ref(null);
 const loading = ref(false);
 const servers = ref([]);
 
@@ -325,7 +322,6 @@ onMounted(async () => {
 // ---------------------------
 // Backups
 // ---------------------------
-const fakeApiCall = () => new Promise((resolve) => setTimeout(resolve, 1500));
 
 const backup = async (item) => {
   try {
@@ -351,11 +347,34 @@ const backup = async (item) => {
 };
 
 const restore = async (item) => {
+  selectedItem.value = item;
   restoreSelectModal.value.showModal();
 };
 
 const handleRestoreSelect = async ({ type, item }) => {
-  await progressModal.value.showModal(fakeApiCall);
+  console.log("Initial selected item:", selectedItem.value);
+  console.log("Item selected in modal:", item.id);
+
+  try {
+    // Construct endpoint with itemId and query parameter token
+    const endpoint = `/restore/${selectedItem.value.id}?tokenType=bot`;
+
+    // Prepare payload for the API
+    const payload = {
+      itemType: "guild",
+      itemName: item.name,
+      iconURL: item.iconURL,
+      itemIdToRestoreInto: item.id,
+    };
+
+    // Send POST request
+    const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
+    toast.success("Restore Started Successfully, Check on Downloads Page");
+    return result;
+  } catch (err) {
+    toast.error(err.message || "Failed to start backup download");
+  }
 };
 
 async function download(server) {

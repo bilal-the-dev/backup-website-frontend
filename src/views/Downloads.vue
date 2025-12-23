@@ -71,6 +71,11 @@
                   <div class="flex items-center gap-3 flex-wrap">
                     <span class="text-white font-medium">
                       {{ job.name }}
+                      <span
+                        class="text-xs px-2 py-1 rounded-md border border-gray-700 text-gray-400"
+                      >
+                        {{ job.processType.toUpperCase() }}
+                      </span>
                     </span>
                   </div>
 
@@ -160,6 +165,11 @@
                   <div class="flex items-center gap-3 flex-wrap">
                     <span class="text-white font-medium">
                       {{ job.name }}
+                      <span
+                        class="text-xs px-2 py-1 rounded-md border border-gray-700 text-gray-400"
+                      >
+                        {{ job.processType.toUpperCase() }}
+                      </span>
                     </span>
                   </div>
 
@@ -243,6 +253,11 @@
                   <div class="flex items-center gap-3 flex-wrap">
                     <span class="text-white font-medium">
                       {{ job.name }}
+                      <span
+                        class="text-xs px-2 py-1 rounded-md border border-gray-700 text-gray-400"
+                      >
+                        {{ job.processType.toUpperCase() }}
+                      </span>
                     </span>
                   </div>
 
@@ -370,6 +385,7 @@ onMounted(async () => {
         type: ITEM_TYPE_LABELS[item.itemType] || item.itemType?.toUpperCase(),
         icon: item.iconURL || DEFAULT_ICON,
         errorMessage: item.errorMsg || item.errorMsg || null,
+        processType: item.processType,
       }));
 
       // Separate into active, errored, and completed

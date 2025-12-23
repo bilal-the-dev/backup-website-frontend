@@ -89,52 +89,155 @@
     <div class="flex-1 px-6 py-8 space-y-10 overflow-y-auto">
       <!-- PAGE HEADER -->
       <div class="mb-10">
-        <div
-          class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-br from-[#1b1b22] via-[#121216] to-[#0d0d0f] shadow-2xl"
-        >
-          <!-- Soft glow -->
+        <!-- MAIN WRAPPER -->
+        <div class="flex flex-col lg:flex-row gap-6">
+          <!-- LEFT USER PANEL -->
+
+          <!-- RIGHT HEADER / HERO SECTION (YOUR CODE) -->
           <div
-            class="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-transparent opacity-50 pointer-events-none"
-          ></div>
+            class="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-br from-[#1b1b22] via-[#121216] to-[#0d0d0f] shadow-2xl flex-1"
+          >
+            <!-- Soft glow -->
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-transparent opacity-50 pointer-events-none"
+            ></div>
 
-          <div class="relative px-10 py-10 flex flex-col gap-4">
-            <div class="flex flex-wrap gap-3 mt-4">
-              <span
-                class="px-3 py-1.5 text-sm rounded-md bg-white/20 text-gray-200 border border-white/10"
+            <div class="relative px-10 py-10 flex flex-col gap-4">
+              <div class="flex flex-wrap gap-3 mt-4">
+                <span
+                  class="px-3 py-1.5 text-sm rounded-md bg-white/20 text-gray-200 border border-white/10"
+                >
+                  🤖 User Dashboard
+                </span>
+              </div>
+
+              <h1
+                class="text-4xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow"
               >
-                🤖 User Dashboard
-              </span>
-            </div>
-            <h1
-              class="text-4xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow"
-            >
-              User Backup Dashboard
-            </h1>
+                User Backup Dashboard
+              </h1>
 
-            <p
-              class="text-gray-400 max-w-2xl text-base md:text-lg leading-relaxed"
+              <p
+                class="text-gray-400 max-w-2xl text-base md:text-lg leading-relaxed"
+              >
+                Securely backup your Discord servers, private conversations, and
+                group chats. Everything stays local — fast, private, and under
+                your control.
+              </p>
+
+              <div class="flex flex-wrap gap-3 mt-4">
+                <span
+                  class="px-3 py-1.5 text-sm rounded-full bg-white/10 text-gray-200 border border-white/10"
+                >
+                  🛡️ Local & Private
+                </span>
+
+                <span
+                  class="px-3 py-1.5 text-sm rounded-full bg-white/10 text-gray-200 border border-white/10"
+                >
+                  ⚡ Fast Backups
+                </span>
+
+                <span
+                  class="px-3 py-1.5 text-sm rounded-full bg-white/10 text-gray-200 border border-white/10"
+                >
+                  💾 Servers · DMs · Groups
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="relative flex flex-col items-center gap-5 p-6 w-full lg:w-80 rounded-3xl border border-white/10 bg-gradient-to-br from-[#1b1b22] via-[#121216] to-[#0d0d0f] shadow-2xl overflow-hidden"
+          >
+            <!-- Glow -->
+            <div
+              class="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-40 pointer-events-none"
+            ></div>
+            <span
+              class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blaCK-500/20 text-indigo-300 border border-indigo-500/30"
             >
-              Securely backup your Discord servers, private conversations, and
-              group chats. Everything stays local — fast, private, and under
-              your control.
+              🤖 Backup and Restore Client
+            </span>
+            <!-- Avatar -->
+            <div class="relative">
+              <div
+                class="absolute inset-0 rounded-full blur-xl bg-indigo-500/30"
+              ></div>
+              <img
+                :src="user.avatar"
+                alt="User Avatar"
+                class="relative w-24 h-24 rounded-full border-2 border-white/20 shadow-lg"
+              />
+            </div>
+
+            <!-- Name -->
+            <div class="text-center">
+              <h2 class="text-xl font-bold text-white tracking-tight">
+                {{ user.name }}
+              </h2>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex gap-2 w-full mt-auto">
+              <button
+                @click.stop="backupClient()"
+                class="flex-1 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-white to-gray-200 text-black hover:from-gray-200 hover:to-white transition shadow-md"
+              >
+                Backup
+              </button>
+
+              <button
+                @click.stop="restoreClient()"
+                class="flex-1 py-2 rounded-xl text-sm font-semibold bg-[#1a1a1e] text-white border border-gray-700 hover:bg-gray-800 transition"
+              >
+                Restore
+              </button>
+
+              <button
+                @click.stop="downloadClient()"
+                class="p-2 rounded-xl border border-gray-700 bg-[#1a1a1e] hover:bg-gray-800 transition"
+                title="Download"
+              >
+                <ArrowDownTrayIcon class="w-5 h-5 text-gray-300" />
+              </button>
+            </div>
+          </div>
+
+          <!-- FRIENDS BACKUP PANEL -->
+          <div
+            class="relative flex flex-col gap-5 p-6 w-full lg:w-80 rounded-3xl border border-white/10 bg-gradient-to-br from-[#1b1b22] via-[#121216] to-[#0d0d0f] shadow-2xl overflow-hidden"
+          >
+            <!-- Glow -->
+            <div
+              class="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-40 pointer-events-none"
+            ></div>
+
+            <!-- Title -->
+            <h3 class="relative text-lg font-bold text-white tracking-tight">
+              👥 Backup your friends
+            </h3>
+
+            <p class="relative text-sm text-gray-400">
+              Securely save your Discord friends list locally.
             </p>
 
-            <div class="flex flex-wrap gap-3 mt-4">
-              <span
-                class="px-3 py-1.5 text-sm rounded-full bg-white/10 text-gray-200 border border-white/10"
+            <!-- Buttons -->
+            <div class="relative flex gap-2 mt-auto">
+              <button
+                @click.stop="backupFriends()"
+                class="flex-1 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-white to-gray-200 text-black hover:from-gray-200 hover:to-white transition shadow-md"
               >
-                🛡️ Local & Private
-              </span>
-              <span
-                class="px-3 py-1.5 text-sm rounded-full bg-white/10 text-gray-200 border border-white/10"
+                Backup Friends
+              </button>
+
+              <button
+                @click.stop="downloadFriends()"
+                class="p-2 rounded-xl border border-gray-700 bg-[#1a1a1e] hover:bg-gray-800 transition"
+                title="Download"
               >
-                ⚡ Fast Backups
-              </span>
-              <span
-                class="px-3 py-1.5 text-sm rounded-full bg-white/10 text-gray-200 border border-white/10"
-              >
-                💾 Servers · DMs · Groups
-              </span>
+                <ArrowDownTrayIcon class="w-5 h-5 text-gray-300" />
+              </button>
             </div>
           </div>
         </div>
@@ -211,7 +314,7 @@
               </button>
               <button
                 class="flex-1 bg-[#1a1a1e] text-white text-sm font-medium py-1.5 rounded-lg border border-gray-700 hover:bg-gray-800 transition"
-                @click.stop="restore(server)"
+                @click.stop="restore(server, `guild`)"
               >
                 Restore
               </button>
@@ -230,7 +333,7 @@
 
       <!-- Divider -->
       <div class="border-t border-gray-800 my-4 opacity-50"></div>
-
+      <!-- DMS -->
       <section v-if="dms.length > 0">
         <div class="mt-10 mb-10">
           <div
@@ -272,7 +375,7 @@
               </button>
               <button
                 class="flex-1 bg-[#1a1a1e] text-white text-sm font-medium py-1.5 rounded-lg border border-gray-700 hover:bg-gray-800 transition"
-                @click.stop="restore(dm)"
+                @click.stop="restore(dm, `dm`)"
               >
                 Restore
               </button>
@@ -331,7 +434,7 @@
               </button>
               <button
                 class="flex-1 bg-[#1a1a1e] text-white text-sm font-medium py-1.5 rounded-lg border border-gray-700 hover:bg-gray-800 transition"
-                @click.stop="restore(dm)"
+                @click.stop="restore(dm, `groupdm`)"
               >
                 Restore
               </button>
@@ -349,13 +452,15 @@
       </section>
     </div>
 
-    <ProgessModal ref="progressModal" actionName="Backup" />
-    <ProgessModal ref="progressModal" actionName="Restoring" />
+    <ChannelsModal
+      ref="channelsModal"
+      :server="selectedServer"
+      :channels="serverChannels"
+      @select="handleChannelSelect"
+    />
     <RestoreSelectModal
       ref="restoreSelectModal"
       :servers="servers"
-      :dms="dms"
-      :groupDms="groupDms"
       @select="handleRestoreSelect"
     />
   </div>
@@ -372,11 +477,17 @@ import {
   ArrowRightOnRectangleIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/vue/24/outline";
+import ChannelsModal from "@/components/ChannelsModal.vue";
 const router = useRouter();
-const progressModal = ref(null);
 const restoreSelectModal = ref(null);
+const selectedItem = ref({
+  type: null,
+  item: null,
+});
 const loading = ref(false);
-
+const channelsModal = ref(null);
+const selectedServer = ref(null);
+const serverChannels = ref([]);
 const servers = ref([]);
 const dms = ref([]);
 
@@ -412,6 +523,7 @@ const fetchUser = async () => {
 const fetchServers = async () => {
   loading.value = true;
   try {
+    const guilds = await sendGetRequest("data?tokenType=user");
     const result = await sendGetRequest("data?tokenType=user");
     if (result?.data) {
       servers.value = result.data.guilds.map((guild) => formatDM(guild));
@@ -465,7 +577,6 @@ onMounted(async () => {
 // ---------------------------
 // Backups
 // ---------------------------
-const fakeApiCall = () => new Promise((resolve) => setTimeout(resolve, 1500));
 
 const backup = async (item, type) => {
   try {
@@ -490,12 +601,60 @@ const backup = async (item, type) => {
   }
 };
 
-const restore = async (item) => {
+const restore = async (item, type) => {
+  selectedItem.value.type = type;
+  selectedItem.value.item = item;
   restoreSelectModal.value.showModal();
 };
 
+const handleChannelSelect = (channel) => {
+  handleRestoreApi(channel);
+};
+
+const handleRestoreApi = async (channel) => {
+  try {
+    // Construct endpoint with itemId and query parameter token
+    const endpoint = `/restore/${selectedItem.value.item.id}?tokenType=user`;
+
+    // Prepare payload for the API
+    const payload = {
+      itemType: selectedItem.value.type,
+      itemName: selectedItem.value.item.name,
+      iconURL: selectedItem.value.item.iconURL,
+      itemIdToRestoreInto: channel.id,
+    };
+
+    // Send POST request
+    const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
+    toast.success("Restore Started Successfully, Check on Downloads Page");
+    return result;
+  } catch (err) {
+    toast.error(err.message || "Failed to start backup download");
+  }
+};
+
 const handleRestoreSelect = async ({ type, item }) => {
-  await progressModal.value.showModal(fakeApiCall);
+  try {
+    console.log(selectedItem.value.type);
+    // If the selected item is a guild/server
+    if (selectedItem.value.type !== "guild") {
+      const idToFetch = item.id;
+      selectedServer.value = item;
+
+      // Fetch channels for this server
+      const data = await sendGetRequest(`/data/${idToFetch}?tokenType=user`);
+
+      serverChannels.value = data.data || []; // store channels
+      channelsModal.value.showModal(); // show channels modal
+    }
+    // If it's not a guild, call your restore API directly
+    else {
+      await handleRestoreApi(item); // send item data to your API
+    }
+  } catch (error) {
+    console.error("Error in handleRestoreSelect:", error.message);
+  }
 };
 
 async function download(server) {
@@ -535,6 +694,118 @@ async function download(server) {
 // CHANGE TOKEN
 // ---------------------------
 
+async function backupClient() {
+  try {
+    // Construct endpoint with itemId and query parameter token
+    const endpoint = `/backup/client-settings?tokenType=user`;
+
+    // Prepare payload for the API
+    const payload = {};
+
+    // Send POST request
+    const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
+    toast.success("Backup Started Successfully, Check on Downloads Page");
+    return result;
+  } catch (err) {
+    console.error("Backup error:", err);
+    return err;
+  }
+}
+
+async function downloadClient() {
+  try {
+    // Send GET request to /backup/:backupId
+    const response = await sendGetRequest(
+      `/backup/client-settings?tokenType=user`
+    );
+
+    // Convert JSON object to a Blob
+    const dataStr = JSON.stringify(response, null, 2); // formatted JSON
+    const blob = new Blob([dataStr], { type: "application/json" });
+
+    // Create a temporary link to trigger download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `backup.json`; // filename
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url); // clean up
+
+    toast.success("Backup download started");
+    console.log("Backup response:", response);
+  } catch (error) {
+    toast.error(error.message || "Failed to start backup download");
+    console.error(error);
+  }
+}
+
+async function restoreClient() {
+  try {
+    // Construct endpoint with itemId and query parameter token
+    const endpoint = `/restore/client-settings?tokenType=user`;
+
+    // Prepare payload for the API
+    const payload = {};
+
+    // Send POST request
+    const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
+    toast.success("Restore Started Successfully");
+    return result;
+  } catch (err) {
+    toast.error(err.message || "Failed to start Restore");
+    console.error(err);
+  }
+}
+
+async function backupFriends() {
+  try {
+    // Construct endpoint with itemId and query parameter token
+    const endpoint = `/backup/friends?tokenType=user`;
+
+    // Prepare payload for the API
+    const payload = {};
+
+    // Send POST request
+    const result = await sendPostRequest(endpoint, payload);
+    await fetchUser();
+    toast.success("Backup Started Successfully");
+    return result;
+  } catch (err) {
+    toast.error(err.message || "Failed to start Backup Friends");
+    console.error(err);
+  }
+}
+
+async function downloadFriends() {
+  try {
+    // Send GET request to /backup/:backupId
+    const response = await sendGetRequest(`/backup/friends?tokenType=user`);
+
+    // Convert JSON object to a Blob
+    const dataStr = JSON.stringify(response, null, 2); // formatted JSON
+    const blob = new Blob([dataStr], { type: "application/json" });
+
+    // Create a temporary link to trigger download
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `backup.json`; // filename
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url); // clean up
+
+    toast.success("Backup download started");
+    console.log("Backup response:", response);
+  } catch (error) {
+    toast.error(error.message || "Failed to start backup download");
+    console.error(error);
+  }
+}
 // Click handler
 
 const openDownloads = () => {

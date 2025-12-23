@@ -8,7 +8,7 @@ export const sendPostRequest = async (endpoint, payload) => {
   } catch (error) {
     const errorMsg =
       error.response?.data?.message || error.message || "Something went wrong";
-    return errorMsg;
+    throw new Error(errorMsg);
   }
 };
 

@@ -16,38 +16,26 @@
         </button>
 
         <!-- Title -->
-        <h2 class="text-xl font-semibold text-white mb-6">Restore Backup</h2>
+        <h2 class="text-xl font-semibold text-white mb-6">
+          Channels in {{ server?.name || "" }}
+        </h2>
 
-        <!-- Content -->
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[320px] px-1"
-        >
+        <!-- Channel List -->
+        <div class="overflow-y-auto max-h-[320px] px-1 space-y-2">
           <div
-            v-for="server in servers"
-            :key="server.id"
-            class="bg-[#111116] border border-gray-800 hover:border-white rounded-xl p-4 flex items-center gap-3 cursor-pointer transition"
-            @click="handleSelect(server)"
+            v-for="channel in channels"
+            :key="channel.id"
+            class="bg-[#1a1a1e] border border-gray-700 hover:border-white rounded-lg p-3 cursor-pointer transition text-left text-sm text-gray-300 flex justify-between items-center"
+            @click="handleSelectChannel(channel)"
           >
-            <img
-              :src="server.iconURL"
-              alt="icon"
-              class="w-10 h-10 rounded-lg object-cover"
-            />
-
-            <div class="flex flex-col text-left">
-              <span class="text-sm font-medium text-white">{{
-                server.name
-              }}</span>
-              <span class="text-xs text-gray-500">Server</span>
-            </div>
+            <span># {{ channel.name }}</span>
+            <span class="text-xs text-gray-500"
+              >{{ channel.messages?.length || 0 }} messages</span
+            >
           </div>
 
-          <!-- Empty state -->
-          <div
-            v-if="servers.length === 0"
-            class="col-span-full text-sm text-gray-500 py-10"
-          >
-            Nothing to restore here.
+          <div v-if="channels.length === 0" class="text-sm text-gray-500 py-10">
+            No channels available.
           </div>
         </div>
       </div>
@@ -59,7 +47,8 @@
 import { ref } from "vue";
 
 const props = defineProps({
-  servers: { type: Array, default: () => [] },
+  server: { type: Object, default: null }, // server info
+  channels: { type: Array, default: () => [] }, // channels array
 });
 
 const emit = defineEmits(["select"]);
@@ -74,9 +63,9 @@ const hideModal = () => {
   visible.value = false;
 };
 
-const handleSelect = (server) => {
+const handleSelectChannel = (channel) => {
   hideModal();
-  emit("select", { type: "server", item: server });
+  emit("select", channel); // emit the selected channel
 };
 
 defineExpose({ showModal, hideModal });
@@ -92,9 +81,7 @@ defineExpose({ showModal, hideModal });
   opacity: 0;
 }
 
-/* ============================= */
-/* Custom Dark Scrollbar (Modal) */
-/* ============================= */
+/* Custom Dark Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
