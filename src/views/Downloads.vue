@@ -323,13 +323,35 @@ import {
 import { sendGetRequest, sendPostRequest } from "@/apis/config";
 
 const getStatusText = (job) => {
+  // Only special text while active
   if (job.status === "active") {
-    if (job.type === "SERVER") return "Backing up server...";
-    if (job.type === "DM") return "Backing up DM...";
-    if (job.type === "GROUP DM") return "Backing up group chat...";
-    return "Processing...";
+    const isRestore = job.processType === "restore";
+    const isBackup = job.processType === "backup";
+
+    // SERVER
+    if (job.type === "SERVER") {
+      const progressText = `(${job.processedChannels} / ${job.totalChannels} channels Left)`;
+
+      if (isRestore) return `Restoring server ${progressText}`;
+      if (isBackup) return `Backing up server ${progressText}`;
+    }
+
+    // DM
+    if (job.type === "DM") {
+      if (isRestore) return "Restoring DM...";
+      if (isBackup) return "Backing up DM...";
+    }
+
+    // GROUP DM
+    if (job.type === "GROUP DM") {
+      if (isRestore) return "Restoring group chat...";
+      if (isBackup) return "Backing up group chat...";
+    }
+
+    return isRestore ? "Restoring..." : "Processing...";
   }
 
+  // Finished states
   if (job.status === "completed") return "Completed";
   if (job.status === "errored") return "Error";
   if (job.status === "failed") return "Failed";
@@ -386,6 +408,8 @@ onMounted(async () => {
         icon: item.iconURL || DEFAULT_ICON,
         errorMessage: item.errorMsg || item.errorMsg || null,
         processType: item.processType,
+        totalChannels: item.totalChannels,
+        processedChannels: item.processedChannels,
       }));
 
       // Separate into active, errored, and completed
